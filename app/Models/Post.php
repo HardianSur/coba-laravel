@@ -2,32 +2,52 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-
-class Post 
+class Post extends Model
 {
-    private static $blog_post= [
-        [
-            "title" => "Post Pertama",
-            "slug" => "judul-post-pertama",
-            "author" => "Udin",
-            "body" => "Lorem Udin dolor sit amet consectetur adipisicing elit. Officiis, dolorem. Obcaecati expedita voluptatem ratione minima commodi quam rem et, atque ipsa quo eos debitis ea voluptatum, culpa cupiditate delectus ducimus eveniet? Sapiente laboriosam vero non illum. Neque molestias, quis voluptatum unde corrupti dolores quo facilis fuga commodi tempora vel, velit excepturi. Modi maxime, sint quidem provident sequi aspernatur ab nostrum, pariatur autem amet, officia facilis aut itaque perspiciatis quisquam rerum enim. Quia sint non, nihil harum dignissimos quis dolorum atque, minima perferendis itaque soluta officia et amet aspernatur. Eos vel veritatis iusto magnam quisquam animi dolore suscipit dignissimos necessitatibus rem?"
-        ],
-        [
-            "title" => "Post Kedua",
-            "slug" => "judul-post-kedua",
-            "author" => "Ujang",
-            "body" => "Lorem Ujang dolor sit amet consectetur adipisicing elit. Officiis, dolorem. Obcaecati expedita voluptatem ratione minima commodi quam rem et, atque ipsa quo eos debitis ea voluptatum, culpa cupiditate delectus ducimus eveniet? Sapiente laboriosam vero non illum. Neque molestias, quis voluptatum unde corrupti dolores quo facilis fuga commodi tempora vel, velit excepturi. Modi maxime, sint quidem provident sequi aspernatur ab nostrum, pariatur autem amet, officia facilis aut itaque perspiciatis quisquam rerum enim. Quia sint non, nihil harum dignissimos quis dolorum atque, minima perferendis itaque soluta officia et amet aspernatur. Eos vel veritatis iusto magnam quisquam animi dolore suscipit dignissimos necessitatibus rem?"
-        ]
-    ];
+    use HasFactory;
 
-    public static function all(){
-        return collect(self::$blog_post);
+    //Yang Boleh diisi, sisanya gaboleh
+    // protected $fillable = ['title', 'excerpt','body'];
+
+    //Yang Gaboleh diisi, sisanya boleh
+    protected $guarded = ['id'];
+    protected $with = ['category','author'];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
-    
-    public static function find($slug){
-        $post = static::all();
 
-        return $post->firstWhere('slug', $slug);
+    public function author()
+    {
+        return $this->belongsTo(user::class, 'user_id');
+    }
+
+    public function scopeFilter($query, array $filters)
+    {   
+        //tag when dari laravel
+        //null coalescing operator
+        //sama aja kaya isset($filtes['search']) setelah `,` kalo bernilai true suruh apa
+        $query->when($filters['search'] ?? false, function($query, $search){
+            return $query   ->where('title', 'like', '%'. $search . '%')
+                            ->orWhere('body', 'like', '%'. $search . '%');
+        });
+
+        //callback
+        $query->when($filters['category'] ?? false, function($query, $category){
+            return $query -> whereHas('category', function($query) use($category){
+                $query->where('slug', $category);
+            });
+        });
+
+        //arrow function
+        $query->when($filters['author'] ?? false, fn($query, $author)=>
+            $query -> whereHas('author', fn($query)=>
+                $query->where('username', $author)
+            )
+        );
     }
 }
