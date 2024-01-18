@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('container'); ?>
 
     <h2 class="text-center"><?php echo e($title); ?></h2>

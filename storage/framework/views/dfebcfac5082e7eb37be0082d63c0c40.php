@@ -16,30 +16,25 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
-    <link href="css/dashboard.css" rel="stylesheet">
-
-
 
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo e(asset('css/dashboard.css')); ?>" />
 </head>
 
 <body>
-    <?php echo $__env->make('partials.dark-mode', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
 
     <?php echo $__env->make('dashboard.layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
+    <?php echo $__env->make('partials.dark-mode', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
     <div class="container-fluid">
         <div class="row">
             <?php echo $__env->make('dashboard.layouts.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Welcome Back, <?php echo e(auth()->user()->name); ?></h1>
-                </div>
+                <?php echo $__env->yieldContent('container'); ?>
             </main>
         </div>
     </div>
@@ -48,8 +43,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <script src="/js/dashboard.js"></script>
-    <script src="js/color-modes.js"></script>
+    <script src="<?php echo e(asset('js/dashboard.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/color-modes.js')); ?>"></script>
 </body>
 
 </html>

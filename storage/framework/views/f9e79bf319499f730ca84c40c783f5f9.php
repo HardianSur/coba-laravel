@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('container'); ?>
     <h1>Halaman about</h1>
     <h3><?php echo e($nama); ?></h3>
