@@ -50,7 +50,7 @@
                     </li>
                 <?php else: ?>
                     <li class="nav-item">
-                        <a href="/login" <?php echo e($active === 'Login' ? 'active' : ''); ?>" class="nav-link"><i
+                        <a href="/login <?php echo e($active === 'Login' ? 'active' : ''); ?>" class="nav-link"><i
                                 class="bi bi-box-arrow-in-right"></i> Login</a>
                     </li>
 

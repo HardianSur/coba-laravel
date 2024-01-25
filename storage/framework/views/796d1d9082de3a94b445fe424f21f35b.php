@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('container'); ?>
     <h1>Halaman Home</h1>
 <?php $__env->stopSection(); ?>
